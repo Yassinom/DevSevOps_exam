@@ -14,11 +14,11 @@ public class EmployeesService {
     @Autowired
     private EmployeesRepository employeesRepository;
 
-    public boolean addEmployee(Employees employee) {
+    public String addEmployee(Employees employee) {
         if (employee != null) {
             employeesRepository.save(employee);
-            return true;
-        } return false;
+            return "Employee is well added, Employe est bien ajoute";
+        } return "Please do not leave the Name or Mail fields empty";
     }
 
     public boolean deleteEmployee(String name) {
@@ -29,20 +29,25 @@ public class EmployeesService {
         } return false;
     }
 
-    public Employees getEmployee(Long id) {
+    public String getEmployee(Long id) {
         Optional<Employees> employee = employeesRepository.findById(id);
         if (employee.isPresent()) {
-            return employee.get();
+            return employee.get().getName();
         }
-        return null;
+        return "Employee Not Found, Employe Introuvable";
     }
 
-    public boolean updateEmployee(Long id, String name) {
-        Optional<Employees> employee = employeesRepository.findById(id);
-        if (employee.isPresent()) {
-            employee.get().setName(name);
-            return true;
+    public String updateEmployee(Long id, Employees employee) {
+        Optional<Employees> employee1 = employeesRepository.findById(id);
+        if (employee1.isPresent()) {
+            Optional<Employees> employeeSameMail = Optional.ofNullable(employeesRepository.findByMail(employee.getMail()));
+            if (employeeSameMail.isPresent()) {
+                return "Email already in use, Email dejà utilise !";
+            }
+            employee1.get().setName(employee.getName());
+            employee1.get().setMail(employee.getMail());
+            return "Mail and Name Updated Successfully !";
         }
-        return false;
+        return "Employee Not Found with this id, Employe Introuvable avec l'id saisie";
     }
 }

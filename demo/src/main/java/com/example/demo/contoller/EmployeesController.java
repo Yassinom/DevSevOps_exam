@@ -15,7 +15,7 @@ public class EmployeesController {
     private EmployeesService employeesService;
 
     @PostMapping("/addEmployee")
-    public boolean addEmployee(@RequestBody Employees employee) {
+    public String addEmployee(@RequestBody Employees employee) {
         return employeesService.addEmployee(employee);
     }
 
@@ -25,12 +25,12 @@ public class EmployeesController {
     }
 
     @GetMapping("/getEmployee/{id}")
-    public Employees getEmployee(@PathVariable Long id) {
+    public String getEmployee(@PathVariable Long id) {
         return employeesService.getEmployee(id);
     }
 
     @PutMapping("/updateEmployee/{id}")
-    public boolean updateEmployee(@PathVariable Long id, @RequestBody String name) {
-        return employeesService.updateEmployee(id, name);
+    public String updateEmployee(@PathVariable Long id, @RequestBody Employees employee) {
+        return employeesService.updateEmployee(id, employee);
     }
 }
